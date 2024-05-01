@@ -1,7 +1,10 @@
 import Phaser from "phaser";
+import { Sprite } from "../types";
+import { Player } from "../entities/Player";
 
 class PlayScene extends Phaser.Scene{
-    player: Phaser.Physics.Arcade.Sprite;
+    player: Sprite;
+    startTigger: Sprite;
     
     constructor() {
         super("PlayScene");
@@ -18,20 +21,28 @@ class PlayScene extends Phaser.Scene{
         
     }
     createPlayer() {
-        this.player = this.physics.add
-                        .sprite(0, this.gameHeight, "dino-idle")
-                        .setOrigin(0, 1);
+        this.player = new Player(this, 0, this.gameHeight, "dino-idle");
+
+        this.physics.add.overlap(this.startTigger, this.player, ()=>{
+            console.log('Collision Happens')
+        });
     }
+    
     createEnvironment() {
         this.add
-            .tileSprite(0, this.gameHeight, 800, 26, "ground")
+            .tileSprite(0, this.gameHeight, 4000, 26, "ground")
             .setOrigin(0, 1);
+
+        this.startTigger = this.physics.add
+                .sprite(0, 30, null)
+                .setAlpha(0)
+                .setOrigin(0,1);
     }
 
     registerPlayerControl(){
         const spaceBar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         spaceBar.on("down", () => {
-            this.player.setVelocityY(-400);
+            this.player.setVelocityY(-1000);
         });
     }
 }
