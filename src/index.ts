@@ -8,7 +8,10 @@ const config: Phaser.Types.Core.GameConfig = {
   width: 1000,
   height: 340,
   physics: {
-    default: 'arcade'
+    default: 'arcade',
+    arcade:{
+      debug: true
+    }
   },
   scene: [PreloadScene, PlayScene]
 };
