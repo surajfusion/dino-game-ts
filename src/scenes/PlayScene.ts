@@ -17,9 +17,8 @@ class PlayScene extends Phaser.Scene{
     create() {
         this.createEnvironment();
         this.createPlayer();
-        this.registerPlayerControl();
-        
     }
+
     createPlayer() {
         this.player = new Player(this, 0, this.gameHeight, "dino-idle");
 
@@ -39,12 +38,12 @@ class PlayScene extends Phaser.Scene{
                 .setOrigin(0,1);
     }
 
-    registerPlayerControl(){
-        const spaceBar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        spaceBar.on("down", () => {
-            this.player.setVelocityY(-1000);
-        });
+    /* not needed because called in Player.ts
+    update(time: number, delta: number): void {
+        //console.log('UPDATING');
+        //this.player.update();
     }
+    */
 }
 
 export default PlayScene;
