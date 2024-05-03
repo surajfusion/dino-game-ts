@@ -7,6 +7,7 @@ class PlayScene extends Phaser.Scene{
     startTigger: Sprite;
     ground: Ground;
     shouldStartRoll: boolean;
+    isGameRunning: boolean = false;
     
     constructor() {
         super("PlayScene");
@@ -50,10 +51,12 @@ class PlayScene extends Phaser.Scene{
                     
                     if(this.ground.width <= this.gameWidth){
                         this.ground.width += 20;
+                        this.isGameRunning = true;
                     }else{
                         rolloutEvent.remove();
                         this.player.setVelocityX(0);
                         this.ground.width = this.gameWidth; 
+                        this.isGameRunning = false;
                     }
                     
                 }
