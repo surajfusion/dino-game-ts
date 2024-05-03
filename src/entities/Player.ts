@@ -23,6 +23,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite{
             .setGravityY(5000)
             .setCollideWorldBounds(true)
             .setBodySize(44,92);
+
+        this.registerAnimations();
     }
 
     /*
@@ -40,10 +42,25 @@ export class Player extends Phaser.Physics.Arcade.Sprite{
         //Helps to get the only one, if you hold the key still it will be one.
         const isSpaceJustDown = Phaser.Input.Keyboard.JustDown(space);
         const onFloor = (this.body as Phaser.Physics.Arcade.Body).onFloor();        
-        console.log('Player', space.isDown, isSpaceJustDown);
+        //console.log('Player', space.isDown, isSpaceJustDown);
         if(isSpaceJustDown && onFloor){
-            this.setVelocityY(-1600 );
+            this.setVelocityY(-1600);
+            this.playRunAnimation();
         }
         
+    }
+
+    playRunAnimation(){
+        this.play("dino-run", true);
+    }
+
+
+    registerAnimations(){
+        this.scene.anims.create({
+            key: "dino-run",
+            frames: this.scene.anims.generateFrameNames("dino-run"),
+            frameRate: 10,
+            repeat: -1,
+        });    
     }
 }

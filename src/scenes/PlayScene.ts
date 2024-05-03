@@ -41,12 +41,19 @@ class PlayScene extends Phaser.Scene{
 
             this.shouldStartRoll = true;
 
-            this.time.addEvent({
+            const rolloutEvent = this.time.addEvent({
                 delay: 1000/60,
                 loop: true,
                 callback: () =>{
+                    // console.log('time', this.time);
+                    this.player.setVelocityX(60);
+                    
                     if(this.ground.width <= this.gameWidth){
                         this.ground.width += 20;
+                    }else{
+                        rolloutEvent.remove();
+                        this.player.setVelocityX(0);
+                        this.ground.width = this.gameWidth; 
                     }
                     
                 }
