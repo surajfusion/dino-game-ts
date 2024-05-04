@@ -1,27 +1,20 @@
 import Phaser from "phaser";
 import { Ground, Sprite } from "../types";
 import { Player } from "../entities/Player";
+import GameScene from "./GameScene";
 
-class PlayScene extends Phaser.Scene{
+class PlayScene extends GameScene {
     player: Sprite;
     startTigger: Sprite;
     ground: Ground;
     shouldStartRoll: boolean;
-    isGameRunning: boolean = false;
-    
+
     constructor() {
         super("PlayScene");
     }
 
-    get gameHeight() {
-        return this.game.config.height as number;
-    }
-
-    get gameWidth() {
-        return this.game.config.width as number;
-    }
-        
     create() {
+        console.log('CREATE');
         this.createEnvironment();
         this.createPlayer();
     }

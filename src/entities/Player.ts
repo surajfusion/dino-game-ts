@@ -1,12 +1,15 @@
 import { Physics } from "phaser";
+import GameScene from "../scenes/GameScene";
 
 
 export class Player extends Phaser.Physics.Arcade.Sprite{
     
     cursors: Phaser.Types.Input.Keyboard.CursorKeys;
-    isSpaceJustDown: Boolean 
-    
-    constructor(scene: Phaser.Scene, x: number, y: number, key: string){
+    isSpaceJustDown: Boolean;
+    scene: GameScene;
+
+    //Replace Phase.Scene with GameScene.
+    constructor(scene: GameScene, x: number, y: number, key: string){
         super(scene, x, y, key);
 
         scene.add.existing(this);
@@ -47,7 +50,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite{
             this.setVelocityY(-1600);
         }
 
-        if(!(this.scene as any).isGameRunning){
+        if(!this.scene.isGameRunning){
             this.stopRunAnimation();
             return;
         }
