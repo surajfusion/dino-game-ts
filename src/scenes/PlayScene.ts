@@ -11,6 +11,10 @@ class PlayScene extends GameScene {
     shouldStartRoll: boolean;
     obstacles: ArcadeGroup;
 
+    gameOverText: Phaser.GameObjects.Image;
+    restartText: Phaser.GameObjects.Image;
+    gameOverContainer: Phaser.GameObjects.Container;
+
     spawnInterval: number = 1500;
     spawnTime: number = 0;
     gameSpeed: number = 15;
@@ -24,6 +28,7 @@ class PlayScene extends GameScene {
         this.createObjstacles();
         this.createPlayer();
         this.obstacleCollideWithPlayer();
+        this.createGameOverScreen();
     }
 
     update(time: number, delta: number): void {
@@ -104,6 +109,15 @@ class PlayScene extends GameScene {
         this.obstacles = this.physics.add.group();
     }
 
+    createGameOverScreen(){
+        this.gameOverText = this.add.image(0,0,'gameover');
+        this.restartText = this.add.image(0,80,'restart');
+
+        this.gameOverContainer = this.add.container(this.gameWidth/2, (this.gameHeight/2)-50)
+            .add([this.gameOverText, this.restartText])
+            .setAlpha(0);
+    }
+
     spawnObstables(){
         const obstacleNum = Math.floor(Math.random() * PRELOAD_CONFIG  .cactusesCount) + 1;
         const dist_obstacle = Phaser.Math.Between(600, 900);
@@ -130,7 +144,7 @@ class PlayScene extends GameScene {
             this.player.anims.pause();
             this.player.setTexture("dino-hurt");
             this.isGameRunning = false;
-
+            this.gameOverContainer.setAlpha(1);
             this.spawnTime = 0;
             this.gameSpeed = 10;
         });
@@ -139,7 +153,6 @@ class PlayScene extends GameScene {
     moveGround(){
         this.ground.tilePositionX += this.gameSpeed;
     }
-
 
 }
 
