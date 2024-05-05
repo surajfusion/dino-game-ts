@@ -23,6 +23,7 @@ class PlayScene extends GameScene {
         this.createEnvironment();
         this.createObjstacles();
         this.createPlayer();
+        this.obstacleCollideWithPlayer();
     }
 
     update(time: number, delta: number): void {
@@ -53,6 +54,7 @@ class PlayScene extends GameScene {
 
     createPlayer() {
         this.player = new Player(this, 0, this.gameHeight, "dino-run");
+
 
         this.physics.add.overlap(this.startTigger, this.player, ()=>{
             console.log('Collision Happens', this.startTigger.y)
@@ -106,9 +108,10 @@ class PlayScene extends GameScene {
         const obstacleNum = Math.floor(Math.random() * PRELOAD_CONFIG  .cactusesCount) + 1;
         const dist_obstacle = Phaser.Math.Between(600, 900);
 
-        this.obstacles
+        const obstacles = this.obstacles
             .create(dist_obstacle, this.gameHeight, `obstacle_${obstacleNum}`)
-            .setOrigin(0,1);
+            .setOrigin(0,1)
+            .setImmovable();
             //.setVelocityX(-500); move to the obstacle speed.
     }
     
@@ -120,9 +123,24 @@ class PlayScene extends GameScene {
         });
     }
 
+    obstacleCollideWithPlayer(){
+        this.physics.add.collider(this.obstacles, this.player,  ()=>{
+            console.log('Player Collide with obstacle.');
+            this.physics.pause;
+            this.player.anims.pause();
+            this.player.setTexture("dino-hurt");
+            this.isGameRunning = false;
+
+            this.spawnTime = 0;
+            this.gameSpeed = 10;
+        });
+    }
+
     moveGround(){
         this.ground.tilePositionX += this.gameSpeed;
     }
+
+
 }
 
 export default PlayScene;
