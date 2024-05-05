@@ -13,6 +13,7 @@ class PlayScene extends GameScene {
 
     spawnInterval: number = 1500;
     spawnTime: number = 0;
+    obstacleSpeed: number = 7;
 
     constructor() {
         super("PlayScene");
@@ -36,12 +37,17 @@ class PlayScene extends GameScene {
         this.ground.width += 10;
        }
        */
+       if(!this.isGameRunning) return;
 
        this.spawnTime += delta;
        if(this.spawnTime >= this.spawnInterval){
             this.spawnTime = 0;
             this.spawnObstables();
        }
+
+       Phaser.Actions.IncX(this.obstacles.getChildren(), -this.obstacleSpeed);
+       //This method is used to remove the obstacle is that is out of screen.
+       this.removeObstacle();
     }
 
     createPlayer() {
@@ -73,7 +79,6 @@ class PlayScene extends GameScene {
                         rolloutEvent.remove();
                         this.player.setVelocityX(0);
                         this.ground.width = this.gameWidth; 
-                        this.isGameRunning = false;
                     }
                     
                 }
@@ -102,10 +107,17 @@ class PlayScene extends GameScene {
 
         this.obstacles
             .create(dist_obstacle, this.gameHeight, `obstacle_${obstacleNum}`)
-            .setOrigin(0,1)
-            .setVelocityX(-500);
+            .setOrigin(0,1);
+            //.setVelocityX(-500); move to the obstacle speed.
     }
     
+    removeObstacle(){
+        this.obstacles.getChildren().forEach((obstacle: Sprite)=>{
+            if(obstacle.getBounds().right <= 0){
+                this.obstacles.remove(obstacle);
+            }
+        });
+    }
 }
 
 export default PlayScene;
