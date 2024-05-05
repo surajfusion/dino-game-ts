@@ -51,7 +51,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite{
         }
 
         if(!this.scene.isGameRunning){
-            this.stopRunAnimation();
+            //this.stopRunAnimation();
             return;
         }
 

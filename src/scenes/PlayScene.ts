@@ -1,26 +1,51 @@
 import Phaser from "phaser";
-import { Ground, Sprite } from "../types";
+import { ArcadeGroup, Ground, Sprite } from "../types";
 import { Player } from "../entities/Player";
 import GameScene from "./GameScene";
+import { PRELOAD_CONFIG } from "..";
 
 class PlayScene extends GameScene {
     player: Sprite;
     startTigger: Sprite;
     ground: Ground;
     shouldStartRoll: boolean;
+    obstacles: ArcadeGroup;
+
+    spawnInterval: number = 1500;
+    spawnTime: number = 0;
 
     constructor() {
         super("PlayScene");
     }
 
     create() {
-        console.log('CREATE');
         this.createEnvironment();
+        this.createObjstacles();
         this.createPlayer();
     }
 
+    update(time: number, delta: number): void {
+        //console.log('UPDATING');
+        /* not needed because called in Player.ts
+        //this.player.update();
+        */
+       
+        /*
+        functionality moved to the 
+       if(this.shouldStartRoll){
+        this.ground.width += 10;
+       }
+       */
+
+       this.spawnTime += delta;
+       if(this.spawnTime >= this.spawnInterval){
+            this.spawnTime = 0;
+            this.spawnObstables();
+       }
+    }
+
     createPlayer() {
-        this.player = new Player(this, 0, this.gameHeight, "dino-idle");
+        this.player = new Player(this, 0, this.gameHeight, "dino-run");
 
         this.physics.add.overlap(this.startTigger, this.player, ()=>{
             console.log('Collision Happens', this.startTigger.y)
@@ -39,7 +64,6 @@ class PlayScene extends GameScene {
                 delay: 1000/60,
                 loop: true,
                 callback: () =>{
-                    // console.log('time', this.time);
                     this.player.setVelocityX(60);
                     
                     if(this.ground.width <= this.gameWidth){
@@ -68,20 +92,20 @@ class PlayScene extends GameScene {
                 .setOrigin(0,1);
     }
 
-    
-    update(time: number, delta: number): void {
-        //console.log('UPDATING');
-        /* not needed because called in Player.ts
-        //this.player.update();
-        */
-       
-        /*
-        functionality moved to the 
-       if(this.shouldStartRoll){
-        this.ground.width += 10;
-       }
-       */
+    createObjstacles(){
+        this.obstacles = this.physics.add.group();
     }
+
+    spawnObstables(){
+        const obstacleNum = Math.floor(Math.random() * PRELOAD_CONFIG  .cactusesCount) + 1;
+        const dist_obstacle = Phaser.Math.Between(600, 900);
+
+        this.obstacles
+            .create(dist_obstacle, this.gameHeight, `obstacle_${obstacleNum}`)
+            .setOrigin(0,1)
+            .setVelocityX(-500);
+    }
+    
 }
 
 export default PlayScene;
