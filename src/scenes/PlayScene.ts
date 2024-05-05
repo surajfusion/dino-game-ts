@@ -13,7 +13,7 @@ class PlayScene extends GameScene {
 
     spawnInterval: number = 1500;
     spawnTime: number = 0;
-    obstacleSpeed: number = 7;
+    gameSpeed: number = 15;
 
     constructor() {
         super("PlayScene");
@@ -45,9 +45,10 @@ class PlayScene extends GameScene {
             this.spawnObstables();
        }
 
-       Phaser.Actions.IncX(this.obstacles.getChildren(), -this.obstacleSpeed);
+       Phaser.Actions.IncX(this.obstacles.getChildren(), -this.gameSpeed);
        //This method is used to remove the obstacle is that is out of screen.
        this.removeObstacle();
+       this.moveGround();
     }
 
     createPlayer() {
@@ -117,6 +118,10 @@ class PlayScene extends GameScene {
                 this.obstacles.remove(obstacle);
             }
         });
+    }
+
+    moveGround(){
+        this.ground.tilePositionX += this.gameSpeed;
     }
 }
 
